@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:visible="false"
+        android:id="@+id/favorite_button"
+        app:showAsAction="always"
+        android:title="Add to Favorite"
+        android:icon="@drawable/ic_baseline_favorite_border_24">
+    </item>
+    <item
+        android:id="@+id/favorite_menu"
+        android:title="Favorites"
+        app:showAsAction="ifRoom"
+        >
+    </item>
+
+</menu>

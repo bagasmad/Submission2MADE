@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MoviesList</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <!-- Strings used for fragments for navigation -->
+
+    <string name="show_title">TV Shows</string>
+    <string name="movie_title">Movies</string>
+    <string name="img_url">https://image.tmdb.org/t/p/w500%s</string>
+    <string name="template">Template</string>
+    <string name="rating">Rating: %.2f/10 by %d users</string>
+    <string name="popularity">Popularity: %.2f</string>
+    <string name="original_language">Original language: %s</string>
+    <string name="overview">Overview</string>
+    <string name="displays_movies_and_tv_shows">Displays Movies and TV Shows</string>
+    <string name="poster_image_of_media">Poster Image of Media</string>
+    <string name="logo">logo</string>
+    <string name="favorite_button">favorite button</string>
+</resources>
