@@ -1,18 +1,21 @@
-package com.example.submission3jetpack.data.room
+package com.example.submission3jetpack.data
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = "favorite_tv")
-@Parcelize
-data class FavoriteTvData(
+
+@Entity(tableName = "tv_data") @Parcelize
+data class TvData
+    (
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id : Int = 0,
 
+    @field: SerializedName("original_name", alternate = ["original_title"])
     @ColumnInfo(name = "original_title")
     val original_title: String,
 
@@ -35,5 +38,5 @@ data class FavoriteTvData(
     val popularity: Double,
 
     @ColumnInfo(name = "favorite")
-    val favorite: Boolean = true
+    var favorite: Boolean = false
 ) : Parcelable

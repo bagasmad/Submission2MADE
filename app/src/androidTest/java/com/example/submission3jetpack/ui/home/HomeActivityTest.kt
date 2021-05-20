@@ -45,13 +45,11 @@ class HomeActivityTest {
     }
 
 
-    private fun loadTvDataFromAPI()
-    {
+    private fun loadTvDataFromAPI() {
         EspressoIdlingResource.increment()
         DataAPI.getAPItvShowData(object : DataAPI.DataCallBack {
             override fun onAllDataReceived(responseClass: ResponseClass) {
-                for (result in responseClass.results)
-                {
+                for (result in responseClass.results) {
                     val tvData = MoviesTvData(result.original_title,
                         result.poster_path,
                         result.overview,
@@ -66,13 +64,11 @@ class HomeActivityTest {
         })
     }
 
-    private fun loadMovieDataFromAPI()
-    {
+    private fun loadMovieDataFromAPI() {
         EspressoIdlingResource.increment()
         DataAPI.getAPIMovieData(object : DataAPI.DataCallBack {
             override fun onAllDataReceived(responseClass: ResponseClass) {
-                for (result in responseClass.results)
-                {
+                for (result in responseClass.results) {
                     val movie = MoviesTvData(result.original_title,
                         result.poster_path,
                         result.overview,

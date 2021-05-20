@@ -1,41 +1,31 @@
 package com.example.submission3jetpack.ui.detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.submission3jetpack.R
-import com.example.submission3jetpack.data.MoviesTvData
-import com.example.submission3jetpack.data.room.FavoriteMovieData
-import com.example.submission3jetpack.data.room.FavoriteTvData
+import com.example.submission3jetpack.data.MoviesData
+import com.example.submission3jetpack.data.TvData
 import com.example.submission3jetpack.databinding.ActivityDetailBinding
 import com.example.submission3jetpack.ui.viewmodels.DetailViewModel
-import com.example.submission3jetpack.ui.viewmodels.FavoriteMovieViewModel
-import com.example.submission3jetpack.ui.viewmodels.FavoriteTvShowViewModel
-import com.example.submission3jetpack.ui.viewmodels.FavoriteViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
-
+import com.example.submission3jetpack.ui.viewmodels.ViewModelFactory
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-    private lateinit var data: MoviesTvData
-    private lateinit var favoriteTvShowViewModel: FavoriteTvShowViewModel
-    private lateinit var favoriteMovieViewModel: FavoriteMovieViewModel
+    private lateinit var dataMovie: MoviesData
+    private lateinit var dataTv: TvData
+    private lateinit var viewModel: DetailViewModel
+
+    private var nextBoolean = true
     private var flag = 0
 
     companion object {
         const val EXTRA_DATA = "data"
         const val FLAG = "flag"
-        private var favoriteCheck = MutableLiveData<Boolean>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,59 +34,9 @@ class DetailActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        val viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
-        data = intent.getParcelableExtra<MoviesTvData>(EXTRA_DATA) as MoviesTvData
-        viewModel.setData(data)
-        binding.textOverview.text = viewModel.getData().overview
-        binding.titleText.text = viewModel.getData().original_title
-        binding.originalLanguage.text =
-            resources.getString(R.string.original_language, viewModel.getData().original_language)
-        binding.textPopularity.text =
-            resources.getString(R.string.popularity, viewModel.getData().popularity)
-        binding.textRating.text = resources.getString(
-            R.string.rating,
-            viewModel.getData().vote_average,
-            viewModel.getData().vote_count
-        )
-        Glide.with(applicationContext)
-            .load(resources.getString(R.string.img_url, viewModel.getData().poster_path))
-            .into(binding.imagePoster)
-        flag = intent.getIntExtra("flag", 0)
-        if(flag == 0)
-        {
-            favoriteMovieViewModel = FavoriteViewModelFactory.getInstance(application)
-                .create(FavoriteMovieViewModel::class.java)
-            CoroutineScope(Dispatchers.IO).launch {
-                val movie = favoriteMovieViewModel.getFavorite(data.original_title)
-                if (movie.isNullOrEmpty())
-                {
-                    favoriteCheck.postValue(false)
-                }
-                else
-                {
-                    favoriteCheck.postValue(true)
-                }
-            }
-        }
-        else
-        {
-            favoriteTvShowViewModel = FavoriteViewModelFactory.getInstance(application)
-                .create(FavoriteTvShowViewModel::class.java)
-            CoroutineScope(Dispatchers.IO).launch {
-                val tv = favoriteTvShowViewModel.getFavorite(data.original_title)
-                if (tv.isNullOrEmpty())
-                {
-                    favoriteCheck.postValue(false)
-                }
-                else
-                {
-                    favoriteCheck.postValue(true)
-                }
-            }
-
-        }
-
-
+        val factory = ViewModelFactory.getInstance(application)
+        viewModel = ViewModelProvider(this, factory).get(DetailViewModel::class.java)
+        checkMovieOrTv()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -104,16 +44,17 @@ class DetailActivity : AppCompatActivity() {
         inflater.inflate(R.menu.main_menu, menu)
         menu?.findItem(R.id.favorite_button)?.isVisible = true
         menu?.findItem(R.id.favorite_menu)?.isVisible = false
-        favoriteCheck.observe(this,
+        viewModel.favoriteCheck.observe(this,
             {
-                if(it)
-                {
-                    menu?.findItem(R.id.favorite_button)?.icon = getDrawable(R.drawable.ic_favorite)
+                if (it) {
+                    menu?.findItem(R.id.favorite_button)?.icon =
+                        ContextCompat.getDrawable(this, R.drawable.ic_favorite)
+                    nextBoolean = false
 
-                }
-                else
-                {
-                    menu?.findItem(R.id.favorite_button)?.icon = getDrawable(R.drawable.ic_baseline_favorite_border_24)
+                } else {
+                    menu?.findItem(R.id.favorite_button)?.icon =
+                        ContextCompat.getDrawable(this, R.drawable.ic_baseline_favorite_border_24)
+                    nextBoolean = true
                 }
             })
         return super.onCreateOptionsMenu(menu)
@@ -125,59 +66,69 @@ class DetailActivity : AppCompatActivity() {
                 finish()
             }
             R.id.favorite_button -> {
-                if(favoriteCheck.value==true)
-                {
-                    favoriteCheck.postValue(false)
-                    deleteFavorite()
-                }
-                else
-                {
-                    favoriteCheck.postValue(true)
-                    addToFavorite()
+                if (flag == 0) {
+                    viewModel.updateFavoriteMovie(dataMovie, nextBoolean)
+                    viewModel.favoriteCheck.postValue(nextBoolean)
+                } else {
+                    viewModel.updateFavoriteTvShow(dataTv, nextBoolean)
+                    viewModel.favoriteCheck.postValue(nextBoolean)
                 }
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-
-    fun addToFavorite()
-    {
+    private fun checkMovieOrTv() {
+        flag = intent.getIntExtra("flag", 0)
         if (flag == 0) {
-            CoroutineScope(Dispatchers.IO).launch {
-                favoriteMovieViewModel.addFavorite(FavoriteMovieData(0,
-                    data.original_title,
-                    data.poster_path,
-                    data.overview,
-                    data.vote_average,
-                    data.vote_count,
-                    data.original_language,
-                    data.popularity))
-            }
+            dataMovie = intent.getParcelableExtra<MoviesData>(EXTRA_DATA) as MoviesData
+            viewModel.setMovieData(dataMovie)
+            setViews(viewModel.getMovieData().overview,
+                viewModel.getMovieData().original_title,
+                viewModel.getMovieData().original_language,
+                viewModel.getMovieData().popularity,
+                viewModel.getMovieData().vote_average,
+                viewModel.getMovieData().vote_count,
+                viewModel.getMovieData().poster_path)
+            viewModel.favoriteCheck.postValue(viewModel.getMovieData().favorite)
         } else {
-            CoroutineScope(Dispatchers.IO).launch {
-                favoriteTvShowViewModel.addFavorite(FavoriteTvData(0,
-                    data.original_title,
-                    data.poster_path,
-                    data.overview,
-                    data.vote_average,
-                    data.vote_count,
-                    data.original_language,
-                    data.popularity))
-            }
+            dataTv = intent.getParcelableExtra<TvData>(EXTRA_DATA) as TvData
+            viewModel.setTvData(dataTv)
+            setViews(viewModel.getTvData().overview,
+                viewModel.getTvData().original_title,
+                viewModel.getTvData().original_language,
+                viewModel.getTvData().popularity,
+                viewModel.getTvData().vote_average,
+                viewModel.getTvData().vote_count,
+                viewModel.getTvData().poster_path)
+            viewModel.favoriteCheck.postValue(viewModel.getTvData().favorite)
         }
     }
 
-    fun deleteFavorite()
-    {
-        if (flag == 0) {
-            CoroutineScope(Dispatchers.IO).launch {
-                favoriteMovieViewModel.deleteFavorite(data.original_title)
-            }
-        } else {
-            CoroutineScope(Dispatchers.IO).launch {
-                favoriteTvShowViewModel.deleteFavorite(data.original_title)
-            }
-        }
+    private fun setViews(
+        overview: String,
+        originalTitle: String,
+        originalLanguage: String,
+        popularity: Double,
+        voteAverage: Double,
+        voteCount: Int,
+        posterPath: String,
+    ) {
+        binding.textOverview.text = overview
+        binding.titleText.text = originalTitle
+        binding.originalLanguage.text =
+            resources.getString(R.string.original_language,
+                originalLanguage)
+        binding.textPopularity.text =
+            resources.getString(R.string.popularity, popularity)
+        binding.textRating.text = resources.getString(
+            R.string.rating,
+            voteAverage,
+            voteCount
+        )
+        Glide.with(applicationContext)
+            .load(resources.getString(R.string.img_url, posterPath))
+            .into(binding.imagePoster)
     }
+
 }

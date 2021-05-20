@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.submission3jetpack.data.MoviesTvData
+import com.example.submission3jetpack.data.TvData
 import com.example.submission3jetpack.databinding.TvShowFragmentBinding
 import com.example.submission3jetpack.ui.movie.TvShowAdapter
 import com.example.submission3jetpack.ui.viewmodels.FavoriteTvShowViewModel
-import com.example.submission3jetpack.ui.viewmodels.FavoriteViewModelFactory
-import com.example.submission3jetpack.ui.viewmodels.TvShowViewModel
 import com.example.submission3jetpack.ui.viewmodels.ViewModelFactory
 
 class FavoriteTvShowFragment : Fragment() {
@@ -31,17 +29,12 @@ class FavoriteTvShowFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val factory = FavoriteViewModelFactory.getInstance(requireActivity().application)
+        val factory = ViewModelFactory.getInstance(requireActivity().application)
         viewModelTv = ViewModelProvider(this, factory).get(FavoriteTvShowViewModel::class.java)
         val tvShowAdapter = TvShowAdapter()
-        viewModelTv.getAllFavorite().observe(viewLifecycleOwner,
-            { tvShowsFromDB ->
-                val tvShows : ArrayList<MoviesTvData> = arrayListOf()
-                tvShowsFromDB.forEach { favoriteTvData ->
-                    val tv = MoviesTvData(favoriteTvData.original_title,favoriteTvData.poster_path,favoriteTvData.overview,favoriteTvData.vote_average,favoriteTvData.vote_count,favoriteTvData.original_language, favoriteTvData.popularity)
-                    tvShows.add(tv)
-                }
-                tvShowAdapter.setTvShow(tvShows)
+        viewModelTv.favoriteTvShowsList.observe(viewLifecycleOwner,
+            { favoriteTvShow ->
+                tvShowAdapter.setTvShow(favoriteTvShow)
             })
         with(tvShowFragmentBinding.recyclerViewTv) {
             layoutManager = LinearLayoutManager(context)

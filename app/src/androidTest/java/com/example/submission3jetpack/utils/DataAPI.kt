@@ -7,12 +7,11 @@ import retrofit2.Response
 
 object DataAPI {
 
-    fun getAPIMovieData(callback: DataCallBack)
-    {
+    fun getAPIMovieData(callback: DataCallBack) {
         val service = NetworkHelper().getService()
         service.getMovies().enqueue(object : Callback<ResponseClass> {
             override fun onResponse(call: Call<ResponseClass>, response: Response<ResponseClass>) {
-                response.body()?.let{callback.onAllDataReceived(it)}
+                response.body()?.let { callback.onAllDataReceived(it) }
             }
 
             override fun onFailure(call: Call<ResponseClass>, t: Throwable) {
@@ -23,13 +22,12 @@ object DataAPI {
         })
     }
 
-    fun getAPItvShowData(callback: DataCallBack)
-    {
+    fun getAPItvShowData(callback: DataCallBack) {
 
         val service = NetworkHelper().getService()
         service.getTvShows().enqueue(object : Callback<ResponseClass> {
             override fun onResponse(call: Call<ResponseClass>, response: Response<ResponseClass>) {
-                response.body()?.let{callback.onAllDataReceived(it)}
+                response.body()?.let { callback.onAllDataReceived(it) }
             }
 
             override fun onFailure(call: Call<ResponseClass>, t: Throwable) {
@@ -40,8 +38,7 @@ object DataAPI {
         })
     }
 
-    interface DataCallBack
-    {
+    interface DataCallBack {
         fun onAllDataReceived(responseClass: ResponseClass)
     }
 

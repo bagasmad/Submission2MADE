@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.submission3jetpack.R
-import com.example.submission3jetpack.data.MoviesTvData
+import com.example.submission3jetpack.data.MoviesData
 import com.example.submission3jetpack.databinding.CardItemBinding
 import com.example.submission3jetpack.ui.detail.DetailActivity
 
 
 class MovieAdapter() : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
-    private var listMovies = ArrayList<MoviesTvData>()
+    private var listMovies = ArrayList<MoviesData>()
 
-    fun setMovie(movies: List<MoviesTvData>?) {
+    fun setMovie(movies: List<MoviesData>?) {
         if (movies == null) return
         this.listMovies.clear()
         this.listMovies.addAll(movies)
@@ -41,7 +41,7 @@ class MovieAdapter() : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     class MovieViewHolder(private val binding: CardItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: MoviesTvData) {
+        fun bind(movie: MoviesData) {
             with(binding) {
                 movieTitle.text = movie.original_title
                 movieDescription.text = movie.overview

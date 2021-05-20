@@ -1,9 +1,10 @@
 package com.example.submission3jetpack.utils
 
-import com.example.submission3jetpack.data.MoviesTvData
+import com.example.submission3jetpack.data.MoviesData
+import com.example.submission3jetpack.data.TvData
 
 data class ParseJson
     (
-    val movies: ArrayList<MoviesTvData>,
-    val shows: ArrayList<MoviesTvData>,
+    val movies: ArrayList<MoviesData>,
+    val shows: ArrayList<TvData>,
 )

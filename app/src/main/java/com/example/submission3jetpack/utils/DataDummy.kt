@@ -1,6 +1,7 @@
 package com.example.submission3jetpack.utils
 
-import com.example.submission3jetpack.data.MoviesTvData
+import com.example.submission3jetpack.data.MoviesData
+import com.example.submission3jetpack.data.TvData
 import com.example.submission3jetpack.data.source.remote.response.MoviesTvDataResponse
 import com.example.submission3jetpack.retrofit.ResponseClass
 import com.google.gson.Gson
@@ -13,8 +14,8 @@ object DataDummy {
 }
 """
 
-    fun getMovies(): List<MoviesTvData> {
-        val listMovies: ArrayList<MoviesTvData> = arrayListOf()
+    fun getMovies(): List<MoviesData> {
+        val listMovies: ArrayList<MoviesData> = arrayListOf()
         return try {
             val json = getData()
             json?.let { it.movies.forEachIndexed { _, moviesData -> listMovies.add(moviesData) } }
@@ -25,8 +26,8 @@ object DataDummy {
         }
     }
 
-    fun getTvShows(): List<MoviesTvData> {
-        val listShow: ArrayList<MoviesTvData> = arrayListOf()
+    fun getTvShows(): List<TvData> {
+        val listShow: ArrayList<TvData> = arrayListOf()
         return try {
             val json = getData()
             json?.let { it.shows.forEachIndexed { _, moviesData -> listShow.add(moviesData) } }
