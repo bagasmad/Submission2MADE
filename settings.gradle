@@ -1,2 +1,4 @@
+include ':favorite'
+include ':core'
 include ':app'
-rootProject.name = "Submission3Jetpack"
+rootProject.name = "Submission2MADE"

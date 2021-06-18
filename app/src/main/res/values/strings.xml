@@ -14,5 +14,5 @@
     <string name="displays_movies_and_tv_shows">Displays Movies and TV Shows</string>
     <string name="poster_image_of_media">Poster Image of Media</string>
     <string name="logo">logo</string>
-    <string name="favorite_button">favorite button</string>
+    <string name="title_favorite">Favorite</string>
 </resources>

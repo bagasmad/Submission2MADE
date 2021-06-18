@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="poster_image_of_media">Poster Image of Media</string>
+    <string name="template">Template</string>
+    <string name="img_url">https://image.tmdb.org/t/p/w500%s</string>
+</resources>

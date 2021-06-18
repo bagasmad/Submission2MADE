@@ -3,12 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.movie.MovieFragment">
+    tools:context=".app.movie.MovieFragment">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_margin="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_movie"
+            android:id="@+id/recyclerViewMovie"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/card_item"/>
