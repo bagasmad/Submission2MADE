@@ -16,7 +16,7 @@ import com.example.submission2made.databinding.MovieFragmentBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MovieFragment : Fragment() {
-    lateinit var movieFragmentBinding: MovieFragmentBinding
+    private lateinit var movieFragmentBinding: MovieFragmentBinding
     private val viewModel: MovieViewModel by viewModel()
 
     override fun onCreateView(

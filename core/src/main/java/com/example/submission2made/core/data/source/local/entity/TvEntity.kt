@@ -40,5 +40,5 @@ data class TvEntity
     val popularity: Double,
 
     @ColumnInfo(name = "favorite")
-    var favorite: Boolean = false,
+    var favorite: Boolean = false
 ) : Parcelable

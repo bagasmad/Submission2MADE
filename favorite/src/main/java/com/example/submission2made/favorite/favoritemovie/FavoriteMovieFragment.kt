@@ -13,7 +13,7 @@ import com.example.submission2made.databinding.MovieFragmentBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class FavoriteMovieFragment : Fragment() {
-    lateinit var movieFragmentBinding: MovieFragmentBinding
+    private lateinit var movieFragmentBinding: MovieFragmentBinding
     private val viewModel: FavoriteMovieViewModel by viewModel()
 
     override fun onCreateView(

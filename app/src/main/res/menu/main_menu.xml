@@ -5,12 +5,12 @@
         android:visible="false"
         android:id="@+id/favorite_button"
         app:showAsAction="always"
-        android:title="Add to Favorite"
+        android:title="@string/add_to_favorite"
         android:icon="@drawable/ic_baseline_favorite_border_24">
     </item>
     <item
         android:id="@+id/favorite_menu"
-        android:title="Favorites"
+        android:title="@string/favorites"
         app:showAsAction="ifRoom"
         >
     </item>

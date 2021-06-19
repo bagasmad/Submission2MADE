@@ -141,11 +141,9 @@ class DetailActivity : AppCompatActivity() {
                 originalLanguage)
         binding.textPopularity.text =
             resources.getString(R.string.popularity, popularity)
-        binding.textRating.text = resources.getString(
-            R.string.rating,
-            voteAverage,
-            voteCount
-        )
+        binding.textRating.text = resources.getQuantityString(
+            R.plurals.rating, voteCount,
+            voteAverage, voteCount)
         Glide.with(applicationContext)
             .load(resources.getString(R.string.img_url, posterPath))
             .into(binding.imagePoster)

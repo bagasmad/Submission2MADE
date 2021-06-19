@@ -25,6 +25,8 @@ class RemoteDataSource(private val retrofitInterface: RetrofitInterface) {
             } catch (e: Exception) {
                 emit(ApiResponse.Error("the response is error"))
                 Log.e("remote data source", e.toString())
+                e.printStackTrace()
+
             }
         }.flowOn(Dispatchers.IO)
 
